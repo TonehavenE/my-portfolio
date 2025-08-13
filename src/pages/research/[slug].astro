@@ -1,0 +1,207 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+import { getCollection } from 'astro:content';
+
+// Generate static paths for all publications
+export async function getStaticPaths() {
+    const publications = await getCollection('publications');
+    return publications.map((publication) => ({
+        params: { slug: publication.slug },
+        props: { publication },
+    }));
+}
+
+const { publication } = Astro.props;
+const { Content } = await publication.render();
+---
+
+<Layout title={`${publication.data.title} - Research`}>
+    <Navigation />
+    
+    <main>
+        <div class="container">
+            <article class="research-article">
+                <header class="research-header">
+                    <h1>{publication.data.title}</h1>
+                    <div class="research-meta">
+                        <div class="authors">
+                            <strong>Authors:</strong> {publication.data.authors.join(', ')}
+                        </div>
+                        <div class="journal">
+                            <strong>Published in:</strong> {publication.data.journal}, {publication.data.year}
+                        </div>
+                        <div class="status">
+                            <strong>Status:</strong> 
+                            <span class={`status-badge ${publication.data.status}`}>
+                                {publication.data.status}
+                            </span>
+                        </div>
+                        {publication.data.doi && (
+                            <div class="doi">
+                                <strong>DOI:</strong> 
+                                <a href={`https://doi.org/${publication.data.doi}`} target="_blank" rel="noopener noreferrer">
+                                    {publication.data.doi}
+                                </a>
+                            </div>
+                        )}
+                    </div>
+                </header>
+
+                <div class="research-content">
+                    <Content />
+                </div>
+
+                <footer class="research-footer">
+                    <a href="/#research" class="back-link">← Back to Research</a>
+                </footer>
+            </article>
+        </div>
+    </main>
+</Layout>
+
+<style>
+    main {
+        margin-top: 80px;
+        padding: 2rem 0;
+    }
+
+    .research-article {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .research-header {
+        margin-bottom: 3rem;
+        padding-bottom: 2rem;
+        border-bottom: 2px solid var(--base02);
+    }
+
+    .research-header h1 {
+        font-size: 2.5rem;
+        color: var(--base04);
+        margin-bottom: 1.5rem;
+        line-height: 1.2;
+    }
+
+    .research-meta {
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+        color: var(--base05);
+    }
+
+    .research-meta strong {
+        color: var(--base04);
+    }
+
+    .status-badge {
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        text-transform: capitalize;
+        font-weight: 500;
+    }
+
+    .status-badge.published {
+        background-color: var(--base0B);
+        color: white;
+    }
+
+    .status-badge.submitted {
+        background-color: var(--base0A);
+        color: white;
+    }
+
+    .status-badge.in-review {
+        background-color: var(--base0D);
+        color: white;
+    }
+
+    .status-badge.preprint {
+        background-color: var(--base0E);
+        color: white;
+    }
+
+    .doi a {
+        color: var(--base0D);
+        text-decoration: none;
+    }
+
+    .doi a:hover {
+        text-decoration: underline;
+    }
+
+    .research-content {
+        line-height: 1.8;
+        font-size: 1.1rem;
+    }
+
+    .research-content :global(h1) {
+        color: var(--base04);
+        font-size: 2rem;
+        margin-top: 3rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .research-content :global(h2) {
+        color: var(--base04);
+        font-size: 1.7rem;
+        margin-top: 2.5rem;
+        margin-bottom: 1.2rem;
+        border-bottom: 1px solid var(--base02);
+        padding-bottom: 0.5rem;
+    }
+
+    .research-content :global(h3) {
+        color: var(--base05);
+        font-size: 1.4rem;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    .research-content :global(p) {
+        margin-bottom: 1.5rem;
+        color: var(--base05);
+    }
+
+    .research-footer {
+        margin-top: 4rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--base02);
+    }
+
+    .back-link {
+        color: var(--base0D);
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
+
+    .back-link:hover {
+        color: var(--base0E);
+    }
+
+    @media (max-width: 768px) {
+        .research-header h1 {
+            font-size: 2rem;
+        }
+    }
+</style>
+
+<script>
+    // KaTeX rendering
+    import 'https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.js';
+    import 'https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/contrib/auto-render.min.js';
+    
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false},
+                {left: "\\(", right: "\\)", display: false},
+                {left: "\\[", right: "\\]", display: true}
+            ]
+        });
+    });
+</script>

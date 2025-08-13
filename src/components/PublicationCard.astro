@@ -1,0 +1,127 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+    publication: CollectionEntry<'publications'>;
+}
+
+const { publication } = Astro.props;
+const { title, authors, journal, year, status, url, doi } = publication.data;
+---
+
+<article class="publication">
+    <h4>
+        {url ? (
+            <a href={url} target="_blank" rel="noopener noreferrer">{title}</a>
+        ) : (
+            title
+        )}
+    </h4>
+    <div class="authors">
+        {authors.join(', ')}
+    </div>
+    <div class="journal">
+        {journal}, {year} ({status})
+    </div>
+    {publication.body && (
+        <div class="publication-abstract" set:html={publication.body} />
+    )}
+    <div class="publication-links">
+        {url && (
+            <a href={url} target="_blank" rel="noopener noreferrer" class="pub-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z" />
+                </svg>
+                View Paper
+            </a>
+        )}
+        {doi && (
+            <a href={`https://doi.org/${doi}`} target="_blank" rel="noopener noreferrer" class="pub-link doi">
+                DOI: {doi}
+            </a>
+        )}
+    </div>
+</article>
+
+<style>
+    .publication {
+        background-color: var(--base01);
+        border-left: 4px solid var(--base0D);
+        padding: 1.5rem;
+        margin: 1rem 0;
+        border-radius: 0 8px 8px 0;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .publication:hover {
+        transform: translateX(5px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .publication h4 {
+        color: var(--base04);
+        margin-bottom: 0.5rem;
+        line-height: 1.4;
+    }
+
+    .publication h4 a {
+        color: var(--base04);
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    .publication h4 a:hover {
+        color: var(--base0D);
+    }
+
+    .authors {
+        color: var(--base05);
+        font-style: italic;
+        margin-bottom: 0.5rem;
+    }
+
+    .journal {
+        color: var(--base0D);
+        font-weight: 500;
+        margin-bottom: 1rem;
+    }
+
+    .publication-abstract {
+        color: var(--base05);
+        line-height: 1.6;
+        margin-bottom: 1rem;
+    }
+
+    .publication-links {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .pub-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        color: var(--base0D);
+        text-decoration: none;
+        font-size: 0.9rem;
+        padding: 0.3rem 0.6rem;
+        border-radius: 4px;
+        background-color: var(--base02);
+        transition: all 0.3s ease;
+    }
+
+    .pub-link:hover {
+        background-color: var(--base0D);
+        color: white;
+    }
+
+    .pub-link.doi {
+        background-color: var(--base0A);
+        color: white;
+    }
+
+    .pub-link.doi:hover {
+        background-color: var(--base09);
+    }
+</style>

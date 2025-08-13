@@ -1,0 +1,100 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+    project: CollectionEntry<'projects'>;
+}
+
+const { project } = Astro.props;
+const { title, description, tags, math, mathDescription } = project.data;
+---
+
+<div class="project-card">
+    <h3>
+        <a href={`/projects/${project.slug}`}>{title}</a>
+    </h3>
+    
+    <div class="project-tags">
+        {tags.map((tag) => (
+            <span class={`tag ${tag.toLowerCase().replace(' ', '-')}`}>{tag}</span>
+        ))}
+    </div>
+    
+    <p>{description}</p>
+    
+    {math && (
+        <div class="math-expression">
+            <div set:html={`$$${math}$$`}></div>
+            {mathDescription && <small>{mathDescription}</small>}
+        </div>
+    )}
+</div>
+
+<style>
+    .project-card {
+        background-color: var(--base01);
+        border-radius: 12px;
+        padding: 2rem;
+        border: 1px solid var(--base02);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        height: 100%;
+    }
+
+    .project-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .project-card h3 {
+        margin-bottom: 1rem;
+    }
+
+    .project-card h3 a {
+        color: var(--base0D);
+        text-decoration: none;
+        font-size: 1.5rem;
+    }
+
+    .project-card h3 a:hover {
+        text-decoration: underline;
+    }
+
+    .project-card p {
+        color: var(--base05);
+        margin-bottom: 1.5rem;
+    }
+
+    .project-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .tag {
+        background-color: var(--base02);
+        color: var(--base05);
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+
+    .tag.physics { background-color: var(--base0E); color: white; }
+    .tag.programming { background-color: var(--base0D); color: white; }
+    .tag.math { background-color: var(--base0C); color: white; }
+    .tag.research { background-color: var(--base0B); color: white; }
+    .tag.orbital-mechanics { background-color: var(--base0E); color: white; }
+    .tag.c++ { background-color: var(--base0D); color: white; }
+    .tag.space-tech { background-color: var(--base0B); color: white; }
+    .tag.bioinformatics { background-color: var(--base0B); color: white; }
+    .tag.python { background-color: var(--base0D); color: white; }
+    .tag.statistics { background-color: var(--base0C); color: white; }
+    .tag.mhd { background-color: var(--base0E); color: white; }
+    .tag.pdes { background-color: var(--base0C); color: white; }
+    .tag.fortran { background-color: var(--base0D); color: white; }
+    .tag.fluid-mechanics { background-color: var(--base0E); color: white; }
+    .tag.cfd { background-color: var(--base0C); color: white; }
+    .tag.matlab { background-color: var(--base0D); color: white; }
+</style>
+

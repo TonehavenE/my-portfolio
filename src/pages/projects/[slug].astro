@@ -1,0 +1,293 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+import { getCollection } from 'astro:content';
+
+// Generate static paths for all projects
+export async function getStaticPaths() {
+    const projects = await getCollection('projects');
+    return projects.map((project) => ({
+        params: { slug: project.slug },
+        props: { project },
+    }));
+}
+
+const { project } = Astro.props;
+const { Content } = await project.render();
+---
+
+<Layout title={`${project.data.title} - Your Name`}>
+    <Navigation />
+    
+    <main>
+        <div class="container">
+            <article class="project-article">
+                <header class="project-header">
+                    <h1>{project.data.title}</h1>
+                    <div class="project-meta">
+                        <div class="project-tags">
+                            {project.data.tags.map((tag) => (
+                                <span class={`tag ${tag.toLowerCase().replace(' ', '-')}`}>{tag}</span>
+                            ))}
+                        </div>
+                        <div class="project-status">
+                            Status: <span class={`status ${project.data.status}`}>
+                                {project.data.status}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    {(project.data.github || project.data.demo) && (
+                        <div class="project-links">
+                            {project.data.github && (
+                                <a href={project.data.github} class="project-link github">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                                    </svg>
+                                    View on GitHub
+                                </a>
+                            )}
+                            {project.data.demo && (
+                                <a href={project.data.demo} class="project-link demo">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                                    </svg>
+                                    Live Demo
+                                </a>
+                            )}
+                        </div>
+                    )}
+                </header>
+
+                <div class="project-content">
+                    <Content />
+                </div>
+
+                <footer class="project-footer">
+                    <a href="/#projects" class="back-link">← Back to Projects</a>
+                </footer>
+            </article>
+        </div>
+    </main>
+</Layout>
+
+<style>
+    main {
+        margin-top: 80px;
+        padding: 2rem 0;
+    }
+
+    .project-article {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .project-header {
+        margin-bottom: 3rem;
+        padding-bottom: 2rem;
+        border-bottom: 2px solid var(--base02);
+    }
+
+    .project-header h1 {
+        font-size: 2.5rem;
+        color: var(--base04);
+        margin-bottom: 1.5rem;
+    }
+
+    .project-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .project-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .tag {
+        background-color: var(--base02);
+        color: var(--base05);
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+
+    .tag.physics, .tag.orbital-mechanics, .tag.mhd, .tag.fluid-mechanics { 
+        background-color: var(--base0E); color: white; 
+    }
+    .tag.programming, .tag.c++, .tag.python, .tag.fortran, .tag.matlab { 
+        background-color: var(--base0D); color: white; 
+    }
+    .tag.math, .tag.statistics, .tag.pdes, .tag.cfd { 
+        background-color: var(--base0C); color: white; 
+    }
+    .tag.research, .tag.space-tech, .tag.bioinformatics { 
+        background-color: var(--base0B); color: white; 
+    }
+
+    .project-status {
+        font-weight: 500;
+        color: var(--base05);
+    }
+
+    .status {
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        text-transform: capitalize;
+    }
+
+    .status.active {
+        background-color: var(--base0B);
+        color: white;
+    }
+
+    .status.completed {
+        background-color: var(--base0D);
+        color: white;
+    }
+
+    .status.paused {
+        background-color: var(--base0A);
+        color: white;
+    }
+
+    .project-links {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .project-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        background-color: var(--base01);
+        color: var(--base05);
+        text-decoration: none;
+        border-radius: 8px;
+        border: 1px solid var(--base02);
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .project-link:hover {
+        background-color: var(--base0D);
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .project-content {
+        line-height: 1.8;
+        font-size: 1.1rem;
+    }
+
+    .project-content :global(h1) {
+        color: var(--base04);
+        font-size: 2rem;
+        margin-top: 3rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .project-content :global(h2) {
+        color: var(--base04);
+        font-size: 1.7rem;
+        margin-top: 2.5rem;
+        margin-bottom: 1.2rem;
+        border-bottom: 1px solid var(--base02);
+        padding-bottom: 0.5rem;
+    }
+
+    .project-content :global(h3) {
+        color: var(--base05);
+        font-size: 1.4rem;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    .project-content :global(p) {
+        margin-bottom: 1.5rem;
+        color: var(--base05);
+    }
+
+    .project-content :global(ul), .project-content :global(ol) {
+        margin-bottom: 1.5rem;
+        padding-left: 2rem;
+    }
+
+    .project-content :global(li) {
+        margin-bottom: 0.5rem;
+        color: var(--base05);
+    }
+
+    .project-content :global(blockquote) {
+        border-left: 4px solid var(--base0D);
+        padding-left: 1.5rem;
+        margin: 2rem 0;
+        font-style: italic;
+        background-color: var(--base01);
+        padding: 1.5rem;
+        border-radius: 0 8px 8px 0;
+    }
+
+    .project-footer {
+        margin-top: 4rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--base02);
+    }
+
+    .back-link {
+        color: var(--base0D);
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
+
+    .back-link:hover {
+        color: var(--base0E);
+    }
+
+    @media (max-width: 768px) {
+        .project-header h1 {
+            font-size: 2rem;
+        }
+
+        .project-meta {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .project-links {
+            width: 100%;
+        }
+
+        .project-link {
+            flex: 1;
+            justify-content: center;
+        }
+    }
+</style>
+
+<script>
+    // KaTeX rendering
+    import 'https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.js';
+    import 'https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/contrib/auto-render.min.js';
+    
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false},
+                {left: "\\(", right: "\\)", display: false},
+                {left: "\\[", right: "\\]", display: true}
+            ]
+        });
+    });
+</script>

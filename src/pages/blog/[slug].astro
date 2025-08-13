@@ -1,0 +1,238 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+    const blogPosts = await getCollection('blog');
+    return blogPosts.map((post) => ({
+        params: { slug: post.slug },
+        props: { post },
+    }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+
+function formatDate(date: Date) {
+    return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+    });
+}
+---
+
+<Layout title={`${post.data.title} - Blog`}>
+    <Navigation />
+    
+    <main>
+        <div class="container">
+            <article class="blog-article">
+                <header class="blog-header">
+                    {post.data.heroImage && (
+                        <img src={post.data.heroImage} alt={post.data.title} class="hero-image" />
+                    )}
+                    <h1>{post.data.title}</h1>
+                    <div class="blog-meta">
+                        <time datetime={post.data.pubDate.toISOString()}>
+                            {formatDate(post.data.pubDate)}
+                        </time>
+                        {post.data.updatedDate && (
+                            <div class="updated">
+                                Updated: {formatDate(post.data.updatedDate)}
+                            </div>
+                        )}
+                        {post.data.tags.length > 0 && (
+                            <div class="blog-tags">
+                                {post.data.tags.map((tag) => (
+                                    <span class="tag">{tag}</span>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                </header>
+
+                <div class="blog-content">
+                    <Content />
+                </div>
+
+                <footer class="blog-footer">
+                    <a href="/blog" class="back-link">← Back to Blog</a>
+                </footer>
+            </article>
+        </div>
+    </main>
+</Layout>
+
+<style>
+    main {
+        margin-top: 80px;
+        padding: 2rem 0;
+    }
+
+    .blog-article {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .blog-header {
+        margin-bottom: 3rem;
+        text-align: center;
+    }
+
+    .hero-image {
+        width: 100%;
+        max-height: 400px;
+        object-fit: cover;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+    }
+
+    .blog-header h1 {
+        font-size: 2.5rem;
+        color: var(--base04);
+        margin-bottom: 1.5rem;
+        line-height: 1.2;
+    }
+
+    .blog-meta {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+        padding-bottom: 2rem;
+        border-bottom: 2px solid var(--base02);
+        color: var(--base05);
+    }
+
+    .blog-meta time {
+        font-weight: 500;
+    }
+
+    .updated {
+        font-size: 0.9rem;
+        color: var(--base03);
+    }
+
+    .blog-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .tag {
+        background-color: var(--base02);
+        color: var(--base05);
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+
+    .blog-content {
+        line-height: 1.8;
+        font-size: 1.1rem;
+    }
+
+    .blog-content :global(h1) {
+        color: var(--base04);
+        font-size: 2rem;
+        margin-top: 3rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .blog-content :global(h2) {
+        color: var(--base04);
+        font-size: 1.7rem;
+        margin-top: 2.5rem;
+        margin-bottom: 1.2rem;
+        border-bottom: 1px solid var(--base02);
+        padding-bottom: 0.5rem;
+    }
+
+    .blog-content :global(h3) {
+        color: var(--base05);
+        font-size: 1.4rem;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    .blog-content :global(p) {
+        margin-bottom: 1.5rem;
+        color: var(--base05);
+    }
+
+    .blog-content :global(ul), .blog-content :global(ol) {
+        margin-bottom: 1.5rem;
+        padding-left: 2rem;
+    }
+
+    .blog-content :global(li) {
+        margin-bottom: 0.5rem;
+        color: var(--base05);
+    }
+
+    .blog-content :global(blockquote) {
+        border-left: 4px solid var(--base0D);
+        padding-left: 1.5rem;
+        margin: 2rem 0;
+        font-style: italic;
+        background-color: var(--base01);
+        padding: 1.5rem;
+        border-radius: 0 8px 8px 0;
+    }
+
+    .blog-content :global(img) {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        margin: 2rem 0;
+    }
+
+    .blog-footer {
+        margin-top: 4rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--base02);
+    }
+
+    .back-link {
+        color: var(--base0D);
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
+
+    .back-link:hover {
+        color: var(--base0E);
+    }
+
+    @media (max-width: 768px) {
+        .blog-header h1 {
+            font-size: 2rem;
+        }
+
+        .blog-meta {
+            flex-direction: column;
+            text-align: center;
+        }
+    }
+</style>
+
+<script>
+    // KaTeX rendering
+    import 'https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.js';
+    import 'https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/contrib/auto-render.min.js';
+    
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$", right: "$", display: true},
+                {left: "$", right: "$", display: false},
+                {left: "\\(", right: "\\)", display: false},
+                {left: "\\[", right: "\\]", display: true}
+            ]
+        });
+    });
+</script>

@@ -1,5 +1,21 @@
-// @ts-check
-import { defineConfig } from 'astro/config';
+import mdx from '@astrojs/mdx';
+import {defineConfig} from 'astro/config';
+import rehypeKatex from 'rehype-katex';
+import remarkMath from 'remark-math';
 
-// https://astro.build/config
-export default defineConfig({});
+export default defineConfig({
+  integrations : [
+    mdx({
+      remarkPlugins : [ remarkMath ],
+      rehypePlugins : [ rehypeKatex ],
+    }),
+  ],
+  markdown : {
+    remarkPlugins : [ remarkMath ],
+    rehypePlugins : [ rehypeKatex ],
+    shikiConfig : {
+      theme : 'github-light',
+      wrap : true,
+    },
+  },
+});
