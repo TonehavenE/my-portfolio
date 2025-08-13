@@ -35,6 +35,7 @@ function formatDate(date: Date) {
                     )}
                     <h1>{post.data.title}</h1>
                     <div class="blog-meta">
+						<div>
                         <time datetime={post.data.pubDate.toISOString()}>
                             {formatDate(post.data.pubDate)}
                         </time>
@@ -43,6 +44,9 @@ function formatDate(date: Date) {
                                 Updated: {formatDate(post.data.updatedDate)}
                             </div>
                         )}
+						</div>
+
+						<div>
                         {post.data.tags.length > 0 && (
                             <div class="blog-tags">
                                 {post.data.tags.map((tag) => (
@@ -50,6 +54,7 @@ function formatDate(date: Date) {
                                 ))}
                             </div>
                         )}
+                            </div>
                     </div>
                 </header>
 
@@ -68,11 +73,11 @@ function formatDate(date: Date) {
 <style>
     main {
         margin-top: 80px;
-        padding: 2rem 0;
+        padding: 4rem 0 2rem 0;
     }
 
     .blog-article {
-        max-width: 800px;
+        max-width: 1000px;
         margin: 0 auto;
     }
 
