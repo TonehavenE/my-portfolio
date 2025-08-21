@@ -18,4 +18,8 @@ export default defineConfig({
       wrap: true,
     },
   },
+  image: {
+    responsiveStyles: true,
+    layout: 'constrained'
+  }
 });
