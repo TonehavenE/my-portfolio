@@ -44,7 +44,15 @@ const { title, description = "Engineering Physics Student & Researcher", enableF
         * {
             margin: 0;
             padding: 0;
+            padding-left: 2rem;
+            padding-right: 2rem;
             box-sizing: border-box;
+        }
+
+        html {
+            /* Remove any default margin/padding from html element */
+            margin: 0;
+            padding: 0;
         }
 
         body {
@@ -52,13 +60,18 @@ const { title, description = "Engineering Physics Student & Researcher", enableF
             background-color: var(--base00);
             color: var(--base05);
             line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            /* Add side margins to the entire body */
+            padding-left: 2rem;
+            padding-right: 2rem;
         }
 
-		/* Global styles */
+        /* Global styles */
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 4rem;
+            padding: 0 2rem;
         }
 
         .section {
@@ -146,8 +159,13 @@ const { title, description = "Engineering Physics Student & Researcher", enableF
 
         /* Mobile responsive margins */
         @media (max-width: 768px) {
+            body {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            
             .container {
-                padding: 0 1.5rem;
+                padding: 0 1rem;
             }
         }
     </style>

@@ -1,7 +1,7 @@
 ---
 title: "Orbital Perturbation Analysis for Next-Generation Earth Observation Satellites"
 authors: 
-  - "Your Name"
+  - "Eben Quenneville"
   - "Dr. Advisor Name"
   - "Research Team"
 journal: "Journal of Spacecraft Technology"

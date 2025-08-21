@@ -1,7 +1,7 @@
 ---
 title: "Phylogenetic Reconstruction of Lepidoptera Using Whole Genome Sequencing"
 authors: 
-  - "Your Name"
+  - "Eben Quenneville"
   - "Biology Collaborators"
 journal: "Molecular Biology and Evolution"
 year: 2024

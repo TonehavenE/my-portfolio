@@ -21,18 +21,18 @@ const recentPublications = publications
   .slice(0, 3);
 ---
 
-<Layout title="Your Name - Engineering Physics Portfolio" enableFadeIn={true}>
+<Layout title="Eben Quenneville - Engineering Physics Portfolio" enableFadeIn={true}>
     <Navigation />
     
     <main>
         <!-- Hero Section -->
         <section id="home" class="hero fade-in-enabled">
             <div class="container">
-                <h1>Your Name</h1>
+                <h1>Eben Quenneville</h1>
                 <div class="subtitle">Engineering Physics Student & Researcher</div>
                 <p>
                     Solving complex problems in satellite technology, fluid dynamics, 
-                    magnetohydrodynamics, and computational biology. Passionate about 
+                    particle physics, and computational biology. Passionate about 
                     the intersection of physics, mathematics, and engineering.
                 </p>
             </div>
@@ -43,12 +43,12 @@ const recentPublications = publications
             <div class="container">
                 <h2>About Me</h2>
                 <div class="about-content">
-                    <div class="about-image">YN</div>
+					<div class="about-image"><img class="about-image" src="Selfie.jpg" alt="Headshot"></div>
                     <div class="about-text">
                         <p>
                             I'm an engineering physics student with a passion for tackling some of 
                             the most challenging problems in science and technology. My work spans 
-                            multiple disciplines, from developing satellite systems for NASA to 
+                            multiple disciplines, from developing a CubeSAT for NASA to 
                             studying the evolutionary patterns of butterfly species through phylogenetics.
                         </p>
                         
@@ -97,19 +97,15 @@ const recentPublications = publications
                 <div class="contact-info">
                     <div class="contact-item">
                         <h4>Email</h4>
-                        <a href="mailto:your.email@university.edu">your.email@university.edu</a>
+                        <a href="mailto:eben.quenneville@unh.edu">eben.quenneville@unh.edu</a>
                     </div>
                     <div class="contact-item">
                         <h4>LinkedIn</h4>
-                        <a href="https://linkedin.com/in/yourprofile">linkedin.com/in/yourprofile</a>
+                        <a href="https://linkedin.com/in/ebenq">linkedin.com/in/ebenq</a>
                     </div>
                     <div class="contact-item">
                         <h4>GitHub</h4>
-                        <a href="https://github.com/yourusername">github.com/yourusername</a>
-                    </div>
-                    <div class="contact-item">
-                        <h4>ORCID</h4>
-                        <a href="https://orcid.org/0000-0000-0000-0000">0000-0000-0000-0000</a>
+                        <a href="https://github.com/TonehavenE">github.com/TonehavenE</a>
                     </div>
                 </div>
             </div>
@@ -118,14 +114,15 @@ const recentPublications = publications
 
     <footer>
         <div class="container">
-            <p>&copy; 2024 Your Name. Built with passion for physics and mathematics.</p>
+            <p>&copy; 2025 Eben Quenneville.</p>
         </div>
     </footer>
 </Layout>
 
 <style>
     main {
-        margin-top: 80px;
+        /* Remove the fixed margin-top since we're handling spacing differently */
+        padding-top: 100px;
     }
 
     /* Hero Section */
@@ -157,19 +154,19 @@ const recentPublications = publications
         margin: 0 auto;
     }
 
-	/* About Section */
-	.about-content {
-		display: grid;
-		grid-template-columns: 1fr 2fr;
-		gap: 3rem;
-		align-items: center;
-	}
+    /* About Section */
+    .about-content {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 3rem;
+        align-items: center;
+    }
 
-	/* Increase section spacing */
-	.section {
-		margin-bottom: 8rem;
-		padding-top: 4rem;
-	}
+    /* Increase section spacing */
+    .section {
+        margin-bottom: 8rem;
+        padding-top: 4rem;
+    }
 
     .about-image {
         width: 250px;
@@ -238,7 +235,7 @@ const recentPublications = publications
 
     .contact-item {
         background-color: var(--base01);
-        padding: 2rem;
+        padding: 0.5rem;
         border-radius: 12px;
         border: 1px solid var(--base02);
     }

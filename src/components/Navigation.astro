@@ -3,7 +3,7 @@
 
 <nav>
     <div class="nav-container">
-        <a href="/" class="logo">Your Name</a>
+        <a href="/" class="logo">Eben Quenneville</a>
         <ul class="nav-links">
             <li><a href="/">Home</a></li>
             <li><a href="#about">About</a></li>
@@ -18,20 +18,24 @@
 
 <style>
     nav {
-        background-color: var(--base01);
+        background-color: rgba(239, 241, 245, 0.95);
         padding: 1rem 0;
         position: fixed;
         top: 0;
-        width: 100%;
+        left: 0;
+        right: 0;
         z-index: 1000;
         backdrop-filter: blur(10px);
         border-bottom: 1px solid var(--base02);
+        /* Ensure nav takes up the full width */
+        width: 100%;
+        margin: 0;
     }
 
     .nav-container {
         max-width: 1200px;
         margin: 0 auto;
-        padding: 0 2rem;
+        padding: 0 4rem;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -48,6 +52,8 @@
         display: flex;
         list-style: none;
         gap: 2rem;
+        margin: 0;
+        padding: 0;
     }
 
     .nav-links a {
@@ -76,6 +82,10 @@
     }
 
     @media (max-width: 768px) {
+        .nav-container {
+            padding: 0 2rem;
+        }
+        
         .nav-links {
             display: none;
         }
@@ -87,13 +97,13 @@
     window.addEventListener('scroll', function() {
         const nav = document.querySelector('nav');
         if (window.scrollY > 50) {
-            nav.style.backgroundColor = 'rgba(215, 220, 230, 0.95)';
+            nav.style.backgroundColor = 'rgba(215, 220, 230, 0.98)';
         } else {
-            nav.style.backgroundColor = 'var(--base01)';
+            nav.style.backgroundColor = 'rgba(239, 241, 245, 0.95)';
         }
     });
 
-	// Smooth scrolling for navigation links
+    // Smooth scrolling for navigation links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
