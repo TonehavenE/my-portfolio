@@ -1,3 +1,4 @@
+
 ---
 import type { CollectionEntry } from 'astro:content';
 
@@ -13,18 +14,18 @@ const { title, description, tags, math, mathDescription } = project.data;
     <h3>
         <a href={`/projects/${project.slug}`}>{title}</a>
     </h3>
-    
+
     <div class="project-tags">
         {tags.map((tag) => (
             <span class={`tag ${tag.toLowerCase().replace(' ', '-')}`}>{tag}</span>
         ))}
     </div>
-    
+
     <p>{description}</p>
-    
+
     {math && (
         <div class="math-expression">
-            <div set:html={`$$${math}$$`}></div>
+			<div>`$$ ${math} $`</div>
             {mathDescription && <small>{mathDescription}</small>}
         </div>
     )}
@@ -65,36 +66,17 @@ const { title, description, tags, math, mathDescription } = project.data;
     }
 
     .project-tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        margin-bottom: 1rem;
+        /* ...existing code... */
     }
 
     .tag {
-        background-color: var(--base02);
-        color: var(--base05);
-        padding: 0.3rem 0.8rem;
+        background-color: var(--base0C);
+        color: white;
+        padding: 0.4rem 1.0rem;
         border-radius: 20px;
         font-size: 0.8rem;
         font-weight: 500;
     }
 
-    .tag.physics { background-color: var(--base0E); color: white; }
-    .tag.programming { background-color: var(--base0D); color: white; }
-    .tag.math { background-color: var(--base0C); color: white; }
-    .tag.research { background-color: var(--base0B); color: white; }
-    .tag.orbital-mechanics { background-color: var(--base0E); color: white; }
-    .tag.c++ { background-color: var(--base0D); color: white; }
-    .tag.space-tech { background-color: var(--base0B); color: white; }
-    .tag.bioinformatics { background-color: var(--base0B); color: white; }
-    .tag.python { background-color: var(--base0D); color: white; }
-    .tag.statistics { background-color: var(--base0C); color: white; }
-    .tag.mhd { background-color: var(--base0E); color: white; }
-    .tag.pdes { background-color: var(--base0C); color: white; }
-    .tag.fortran { background-color: var(--base0D); color: white; }
-    .tag.fluid-mechanics { background-color: var(--base0E); color: white; }
-    .tag.cfd { background-color: var(--base0C); color: white; }
-    .tag.matlab { background-color: var(--base0D); color: white; }
 </style>
 

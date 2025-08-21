@@ -1,7 +1,7 @@
 ---
 title: "Magnetohydrodynamic Instabilities in Fusion Plasma Confinement"
 authors: 
-  - "Your Name"
+  - "Eben Quenneville"
   - "Plasma Physics Group"
 journal: "Physics of Plasmas"
 year: 2023

@@ -1,14 +1,14 @@
 ---
-title: "Complex Fluid Dynamics"
-description: "Analysis of non-Newtonian fluid behavior and turbulent flow patterns using computational fluid dynamics and experimental validation techniques."
+title: "Rebuilding Channelflow"
+description: "Channelflow is a storied C++ library that has contributed to many research papers in plane geometry fluid dynamics problems. However, the C++ structure has grown old. Channelflow.jl is my attempt to rebuild it in Julia."
 tags: 
   - "Fluid Mechanics"
-  - "CFD"
-  - "MATLAB"
+  - "Julia"
+  - "Research"
 featured: true
 order: 4
-math: "\\frac{\\partial \\vec{u}}{\\partial t} + (\\vec{u} \\cdot \\nabla)\\vec{u} = -\\frac{1}{\\rho}\\nabla p + \\nu \\nabla^2 \\vec{u}"
-mathDescription: "Navier-Stokes equations for fluid motion"
+math: "Modelling the Navier-Stokes equations for fluid motion in channel flow geometries."
+mathDescription: "Professor John F. Gibson"
 status: "active"
 ---
 
