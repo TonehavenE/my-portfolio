@@ -1,173 +1,195 @@
 ---
+import ParticleBackground from "../components/ParticleBackground.astro";
 export interface Props {
-  title: string;
-  description?: string;
-  enableFadeIn?: boolean;
+    title: string;
+    description?: string;
+    enableFadeIn?: boolean;
 }
 
-const { title, description = "Engineering Physics Student & Researcher", enableFadeIn = true } = Astro.props;
+const {
+    title,
+    description = "Engineering Physics Student & Researcher",
+    enableFadeIn = true,
+} = Astro.props;
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="description" content={description} />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>{title}</title>
-    
-    <!-- KaTeX CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css">
-    
-    <style>
-        /* Base16 Color Scheme */
-        :root {
-            --base00: #eff1f5;
-            --base01: #d7dce6;
-            --base02: #bfc7d7;
-            --base03: #a7b2c8;
-            --base04: #232a38;
-            --base05: #323c51;
-            --base06: #414f69;
-            --base07: #516181;
-            --base08: #d20f39;
-            --base09: #fe640b;
-            --base0A: #df8e1d;
-            --base0B: #40a02b;
-            --base0C: #179299;
-            --base0D: #1e66f5;
-            --base0E: #8839ef;
-            --base0F: #dd7878;
-        }
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="description" content={description} />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <title>{title}</title>
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"
+        ></script>
 
-        body {
-            font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: var(--base00);
-            color: var(--base05);
-            line-height: 1.6;
-        }
+        <!-- KaTeX CSS -->
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css"
+        />
 
-		/* Global styles */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 4rem;
-        }
-
-        .section {
-            margin-bottom: 6rem;
-            padding-top: 2rem;
-        }
-
-        .section h2 {
-            font-size: 2.5rem;
-            color: var(--base04);
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-
-        /* Mathematical expressions */
-        .math-expression {
-            background-color: var(--base01);
-            border: 1px solid var(--base02);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-            text-align: center;
-        }
-
-        .math-expression small {
-            display: block;
-            margin-top: 0.5rem;
-            color: var(--base05);
-            font-style: italic;
-        }
-
-        /* Code styling */
-        pre {
-            background-color: var(--base01);
-            border: 1px solid var(--base02);
-            border-radius: 8px;
-            padding: 1rem;
-            overflow-x: auto;
-            margin: 1rem 0;
-        }
-
-        code {
-            font-family: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
-            background-color: var(--base02);
-            padding: 0.2rem 0.4rem;
-            border-radius: 4px;
-            font-size: 0.9em;
-        }
-
-        pre code {
-            background: none;
-            padding: 0;
-        }
-
-        /* Fade in animation */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
+        <style>
+            /* Base16 Color Scheme */
+            :root {
+                --base00: #eff1f5;
+                --base01: #d7dce6;
+                --base02: #bfc7d7;
+                --base03: #a7b2c8;
+                --base04: #232a38;
+                --base05: #323c51;
+                --base06: #414f69;
+                --base07: #516181;
+                --base08: #d20f39;
+                --base09: #fe640b;
+                --base0A: #df8e1d;
+                --base0B: #40a02b;
+                --base0C: #179299;
+                --base0D: #1e66f5;
+                --base0E: #8839ef;
+                --base0F: #dd7878;
             }
-            to {
-                opacity: 1;
-                transform: translateY(0);
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
             }
-        }
 
-        .fade-in-enabled {
-            animation: fadeInUp 0.8s ease-out forwards;
-        }
+            body {
+                font-family:
+                    "SF Pro Text",
+                    -apple-system,
+                    BlinkMacSystemFont,
+                    "Segoe UI",
+                    Roboto,
+                    sans-serif;
+                background-color: var(--base00);
+                color: var(--base05);
+                line-height: 1.6;
+            }
 
-        .fade-in-enabled.delayed {
-            opacity: 0;
-            animation-delay: 0.2s;
-        }
-
-        .fade-in-enabled.delayed-2 {
-            opacity: 0;
-            animation-delay: 0.4s;
-        }
-
-        .fade-in-enabled.delayed-3 {
-            opacity: 0;
-            animation-delay: 0.6s;
-        }
-
-        /* Mobile responsive margins */
-        @media (max-width: 768px) {
+            /* Global styles */
             .container {
-                padding: 0 1.5rem;
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 0 4rem;
             }
-        }
-    </style>
-</head>
-<body class={enableFadeIn ? 'fade-in-enabled' : ''}>
-    <slot />
-    
-    <script define:vars={{ enableFadeIn }}>
-        if (enableFadeIn) {
-            // Add fade-in classes to sections
-            document.addEventListener('DOMContentLoaded', function() {
-                const sections = document.querySelectorAll('.section, .hero');
-                sections.forEach((section, index) => {
-                    section.classList.add('fade-in-enabled');
-                    if (index > 0) {
-                        section.classList.add(`delayed${index > 3 ? '-3' : index > 2 ? '-2' : index > 1 ? '' : ''}`);
-                    }
+
+            .section {
+                margin-bottom: 6rem;
+                padding-top: 2rem;
+            }
+
+            .section h2 {
+                font-size: 2.5rem;
+                color: var(--base04);
+                margin-bottom: 2rem;
+                text-align: center;
+            }
+
+            /* Mathematical expressions */
+            .math-expression {
+                background-color: var(--base01);
+                border: 1px solid var(--base02);
+                border-radius: 8px;
+                padding: 1.5rem;
+                margin: 1.5rem 0;
+                text-align: center;
+            }
+
+            .math-expression small {
+                display: block;
+                margin-top: 0.5rem;
+                color: var(--base05);
+                font-style: italic;
+            }
+
+            /* Code styling */
+            pre {
+                background-color: var(--base01);
+                border: 1px solid var(--base02);
+                border-radius: 8px;
+                padding: 1rem;
+                overflow-x: auto;
+                margin: 1rem 0;
+            }
+
+            code {
+                font-family: "SF Mono", "Monaco", "Inconsolata", monospace;
+                background-color: var(--base02);
+                padding: 0.2rem 0.4rem;
+                border-radius: 4px;
+                font-size: 0.9em;
+            }
+
+            pre code {
+                background: none;
+                padding: 0;
+            }
+
+            /* Fade in animation */
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(30px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .fade-in-enabled {
+                animation: fadeInUp 0.8s ease-out forwards;
+            }
+
+            .fade-in-enabled.delayed {
+                opacity: 0;
+                animation-delay: 0.2s;
+            }
+
+            .fade-in-enabled.delayed-2 {
+                opacity: 0;
+                animation-delay: 0.4s;
+            }
+
+            .fade-in-enabled.delayed-3 {
+                opacity: 0;
+                animation-delay: 0.6s;
+            }
+
+            /* Mobile responsive margins */
+            @media (max-width: 768px) {
+                .container {
+                    padding: 0 1.5rem;
+                }
+            }
+        </style>
+    </head>
+    <body class={enableFadeIn ? "fade-in-enabled" : ""}>
+        <ParticleBackground />
+        <slot />
+
+        <script define:vars={{ enableFadeIn }}>
+            if (enableFadeIn) {
+                // Add fade-in classes to sections
+                document.addEventListener("DOMContentLoaded", function () {
+                    const sections =
+                        document.querySelectorAll(".section, .hero");
+                    sections.forEach((section, index) => {
+                        section.classList.add("fade-in-enabled");
+                        if (index > 0) {
+                            section.classList.add(
+                                `delayed${index > 3 ? "-3" : index > 2 ? "-2" : index > 1 ? "" : ""}`,
+                            );
+                        }
+                    });
                 });
-            });
-        }
-    </script>
-</body>
+            }
+        </script>
+    </body>
 </html>
