@@ -7,8 +7,6 @@ tags:
     - "Heliophysics"
 featured: true
 order: 1
-math: "\\text{IMAP Student Collaboration}"
-mathDescription: "$\\textit{University of New Hampshire, Howard University, Sonoma State}$"
 status: "active"
 ---
 

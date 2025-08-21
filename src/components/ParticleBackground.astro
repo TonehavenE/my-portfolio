@@ -6,15 +6,22 @@
     // =======================================================
     const PARTICLE_COUNT = 300;
     const MAX_SPEED = 1.5;
-    const TURBULENCE = 2 * Math.PI * 2; // How chaotic the flow is
-    const FIELD_MAGNITUDE = 0.1; // How strongly particles follow the flow
+    const TURBULENCE = 2 * Math.PI * 2;
+    // How chaotic the flow is
+    const FIELD_MAGNITUDE = 0.1;
+    // How strongly particles follow the flow
 
     // --- COLOR SETTINGS ---
-    const PARTICLE_ALPHA = 10; // Opacity of particle trails (0-255)
-    const FADE_ALPHA = 10; // How quickly trails fade (0-255)
-    const RGB_LOW = 30; // Low end for random color channels (0-255)
-    const RGB_HIGH = 255; // High end for random color channels (0-255)
-    const BACKGROUND_RGB = [239, 241, 245]; // Your --base00 color
+    const PARTICLE_ALPHA = 10;
+    // Opacity of particle trails (0-255)
+    const FADE_ALPHA = 10;
+    // How quickly trails fade (0-255)
+    const RGB_LOW = 30;
+    // Low end for random color channels (0-255)
+    const RGB_HIGH = 255;
+    // High end for random color channels (0-255)
+    const BACKGROUND_RGB = [239, 241, 245];
+    // Your --base00 color
 
     // =======================================================
 
@@ -97,8 +104,8 @@
                 "particle-canvas-container",
             );
             const canvas = p.createCanvas(
-                container.offsetWidth,
-                container.offsetHeight,
+                document.body.scrollWidth,
+                document.body.scrollHeight,
             );
             canvas.parent(container);
 
@@ -107,7 +114,6 @@
             }
             p.background(BACKGROUND_RGB);
         };
-
         p.draw = () => {
             p.background(
                 BACKGROUND_RGB[0],
@@ -115,11 +121,9 @@
                 BACKGROUND_RGB[2],
                 FADE_ALPHA,
             );
-
             const cols = Math.floor(p.width / 20);
             const rows = Math.floor(p.height / 20);
             flowfield = new Array(cols * rows);
-
             let yoff = 0;
             for (let y = 0; y < rows; y++) {
                 let xoff = 0;
@@ -143,13 +147,16 @@
             }
         };
 
-        p.windowResized = () => {
-            const container = document.getElementById(
-                "particle-canvas-container",
+        const resizeCanvasToBody = () => {
+            p.resizeCanvas(
+                document.body.scrollWidth,
+                document.body.scrollHeight,
             );
-            p.resizeCanvas(container.offsetWidth, container.offsetHeight);
-            p.background(BACKGROUND_RGB);
         };
+
+        // Use a ResizeObserver to handle content changes
+        const observer = new ResizeObserver(resizeCanvasToBody);
+        observer.observe(document.body);
     };
 
     document.addEventListener("DOMContentLoaded", () => {
@@ -161,7 +168,7 @@
 
 <style>
     #particle-canvas-container {
-        position: fixed;
+        position: absolute;
         top: 0;
         left: 0;
         width: 100%;

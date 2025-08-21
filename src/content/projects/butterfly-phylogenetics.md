@@ -5,10 +5,8 @@ tags:
   - "Bioinformatics"
   - "Python"
   - "Statistics"
-featured: true
+featured: false
 order: 2
-math: "P(T|D) \\propto P(D|T)P(T)"
-mathDescription: "Bayesian inference for phylogenetic reconstruction"
 status: "active"
 github: "https://github.com/yourusername/butterfly-phylogenetics"
 ---

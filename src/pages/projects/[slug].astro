@@ -1,6 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import Navigation from "../../components/Navigation.astro";
+import ProjectCard from "../../components/ProjectCard.astro";
 import { getCollection } from "astro:content";
 
 // Generate static paths for all projects
@@ -14,6 +15,22 @@ export async function getStaticPaths() {
 
 const { project } = Astro.props;
 const { Content } = await project.render();
+
+// Fetch all projects to find the keyboard ones
+const allProjects = await getCollection("projects");
+
+// Identify keyboard projects by a common tag or category
+// (Let's assume we add a 'Keyboards' tag to each keyboard project)
+const keyboardProjects = allProjects
+    .filter(
+        (p) =>
+            p.slug !== "ergo-keyboards" && // Exclude the main page itself
+            p.data.tags.includes("Keyboards"), // Filter by tag
+    )
+    .sort(
+        (a, b) =>
+            new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf(),
+    );
 ---
 
 <Layout title={`${project.data.title} - Eben Quenneville`}>
@@ -88,6 +105,16 @@ const { Content } = await project.render();
                 <div class="project-content">
                     <Content />
                 </div>
+
+                {
+                    project.slug === "ergo-keyboards" && (
+                        <div class="projects-grid">
+                            {keyboardProjects.map((keyboardProject) => (
+                                <ProjectCard project={keyboardProject} />
+                            ))}
+                        </div>
+                    )
+                }
 
                 <footer class="project-footer">
                     <a href="/#projects" class="back-link">← Back to Projects</a
@@ -290,6 +317,13 @@ const { Content } = await project.render();
 
     .back-link:hover {
         color: var(--base0E);
+    }
+
+    .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 2rem;
+        margin-top: 4rem; /* Add some space above the cards */
     }
 
     @media (max-width: 768px) {
