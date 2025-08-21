@@ -1,39 +1,45 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Navigation from '../components/Navigation.astro';
-import ProjectCard from '../components/ProjectCard.astro';
-import PublicationCard from '../components/PublicationCard.astro';
-import { getCollection } from 'astro:content';
+import Layout from "../layouts/Layout.astro";
+import Navigation from "../components/Navigation.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import PublicationCard from "../components/PublicationCard.astro";
+import { getCollection } from "astro:content";
 
 // Get all collections
-const projects = await getCollection('projects');
-const publications = await getCollection('publications');
-const aboutContent = await getCollection('about');
+const projects = await getCollection("projects");
+const publications = await getCollection("publications");
+const aboutContent = await getCollection("about");
 
 // Sort projects by order and filter featured
 const featuredProjects = projects
-  .filter(project => project.data.featured)
-  .sort((a, b) => a.data.order - b.data.order);
+    .filter((project) => project.data.featured)
+    .sort((a, b) => a.data.order - b.data.order);
 
 // Sort publications by year (newest first)
 const recentPublications = publications
-  .sort((a, b) => b.data.year - a.data.year)
-  .slice(0, 3);
+    .sort((a, b) => b.data.year - a.data.year)
+    .slice(0, 3);
 ---
 
-<Layout title="Eben Quenneville - Engineering Physics Portfolio" enableFadeIn={true}>
+<Layout
+    title="Eben Quenneville - Engineering Physics Portfolio"
+    enableFadeIn={true}
+>
     <Navigation />
-    
+
     <main>
         <!-- Hero Section -->
         <section id="home" class="hero fade-in-enabled">
             <div class="container">
                 <h1>Eben Quenneville</h1>
-                <div class="subtitle">Engineering Physics Student & Researcher</div>
+                <div class="subtitle">
+                    Engineering Physics Student & Researcher
+                </div>
                 <p>
-                    Solving complex problems in satellite technology, fluid dynamics, 
-                    particle physics, and computational biology. Passionate about 
-                    the intersection of physics, mathematics, and engineering.
+                    Solving complex problems in satellite technology, fluid
+                    dynamics, particle physics, and computational biology.
+                    Passionate about the intersection of physics, mathematics,
+                    and engineering.
                 </p>
             </div>
         </section>
@@ -43,25 +49,37 @@ const recentPublications = publications
             <div class="container">
                 <h2>About Me</h2>
                 <div class="about-content">
-					<div class="about-image"><img class="about-image" src="Selfie.jpg" alt="Headshot"></div>
+                    <div class="about-image">
+                        <img
+                            class="about-image"
+                            src="Selfie.jpg"
+                            alt="Headshot"
+                        />
+                    </div>
                     <div class="about-text">
                         <p>
-                            I'm an engineering physics student with a passion for tackling some of 
-                            the most challenging problems in science and technology. My work spans 
-                            multiple disciplines, from developing a CubeSAT for NASA to 
-                            studying the evolutionary patterns of butterfly species through phylogenetics.
+                            I'm an engineering physics student with a passion
+                            for tackling some of the most challenging problems
+                            in science and technology. My work spans multiple
+                            disciplines, from developing a CubeSAT for NASA to
+                            studying the evolutionary patterns of butterfly
+                            species through phylogenetics.
                         </p>
-                        
+
                         <p>
-                            My research interests include complex fluid dynamics, magnetohydrodynamics (MHD), 
-                            and computational modeling. I believe in the power of interdisciplinary approaches 
-                            to solve real-world problems and am always excited to explore new frontiers in 
-                            physics and engineering.
+                            My research interests include complex fluid
+                            dynamics, magnetohydrodynamics (MHD), and
+                            computational modeling. I believe in the power of
+                            interdisciplinary approaches to solve real-world
+                            problems and am always excited to explore new
+                            frontiers in physics and engineering.
                         </p>
-                        
+
                         <p>
-                            When I'm not solving equations or writing code, you can find me teaching and 
-                            mentoring other students, sharing the excitement of discovery that drives my work.
+                            When I'm not solving equations or writing code, you
+                            can find me teaching and mentoring other students,
+                            sharing the excitement of discovery that drives my
+                            work.
                         </p>
                     </div>
                 </div>
@@ -73,9 +91,11 @@ const recentPublications = publications
             <div class="container">
                 <h2>Featured Projects</h2>
                 <div class="projects-grid">
-                    {featuredProjects.map((project) => (
-                        <ProjectCard project={project} />
-                    ))}
+                    {
+                        featuredProjects.map((project) => (
+                            <ProjectCard project={project} />
+                        ))
+                    }
                 </div>
             </div>
         </section>
@@ -84,9 +104,11 @@ const recentPublications = publications
         <section id="research" class="section fade-in-enabled delayed-3">
             <div class="container">
                 <h2>Recent Research</h2>
-                {recentPublications.map((pub) => (
-                    <PublicationCard publication={pub} />
-                ))}
+                {
+                    recentPublications.map((pub) => (
+                        <PublicationCard publication={pub} />
+                    ))
+                }
             </div>
         </section>
 
@@ -97,15 +119,21 @@ const recentPublications = publications
                 <div class="contact-info">
                     <div class="contact-item">
                         <h4>Email</h4>
-                        <a href="mailto:eben.quenneville@unh.edu">eben.quenneville@unh.edu</a>
+                        <a href="mailto:eben.quenneville@unh.edu"
+                            >eben.quenneville@unh.edu</a
+                        >
                     </div>
                     <div class="contact-item">
                         <h4>LinkedIn</h4>
-                        <a href="https://linkedin.com/in/ebenq">linkedin.com/in/ebenq</a>
+                        <a href="https://linkedin.com/in/ebenq"
+                            >linkedin.com/in/ebenq</a
+                        >
                     </div>
                     <div class="contact-item">
                         <h4>GitHub</h4>
-                        <a href="https://github.com/TonehavenE">github.com/TonehavenE</a>
+                        <a href="https://github.com/TonehavenE"
+                            >github.com/TonehavenE</a
+                        >
                     </div>
                 </div>
             </div>
@@ -122,14 +150,18 @@ const recentPublications = publications
 <style>
     main {
         /* Remove the fixed margin-top since we're handling spacing differently */
-        padding-top: 100px;
+        /* padding-top: 100px; */
     }
 
     /* Hero Section */
     .hero {
         text-align: center;
         padding: 4rem 0;
-        background: linear-gradient(135deg, var(--base00) 0%, var(--base01) 100%);
+        background: linear-gradient(
+            135deg,
+            var(--base00) 0%,
+            var(--base01) 100%
+        );
         border-radius: 16px;
         margin-bottom: 3rem;
     }
@@ -268,16 +300,16 @@ const recentPublications = publications
         .hero h1 {
             font-size: 2rem;
         }
-        
+
         .hero .subtitle {
             font-size: 1.2rem;
         }
-        
+
         .about-content {
             grid-template-columns: 1fr;
             text-align: center;
         }
-        
+
         .projects-grid {
             grid-template-columns: 1fr;
         }
@@ -286,17 +318,17 @@ const recentPublications = publications
 
 <script>
     // KaTeX rendering
-    import 'https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.js';
-    import 'https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/contrib/auto-render.min.js';
-    
-    document.addEventListener("DOMContentLoaded", function() {
+    import "https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.js";
+    import "https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/contrib/auto-render.min.js";
+
+    document.addEventListener("DOMContentLoaded", function () {
         renderMathInElement(document.body, {
             delimiters: [
-                {left: "$", right: "$", display: true},
-                {left: "$", right: "$", display: false},
-                {left: "\\(", right: "\\)", display: false},
-                {left: "\\[", right: "\\]", display: true}
-            ]
+                { left: "$", right: "$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true },
+            ],
         });
     });
 </script>
