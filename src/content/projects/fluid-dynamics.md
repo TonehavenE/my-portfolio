@@ -7,8 +7,6 @@ tags:
   - "Research"
 featured: true
 order: 4
-math: "Modelling the Navier-Stokes equations for fluid motion in channel flow geometries."
-mathDescription: "Professor John F. Gibson"
 status: "active"
 ---
 

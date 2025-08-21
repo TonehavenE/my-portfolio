@@ -1,5 +1,6 @@
 ---
 import ParticleBackground from "../components/ParticleBackground.astro";
+import Footer from "../components/Footer.astro";
 export interface Props {
     title: string;
     description?: string;
@@ -53,23 +54,9 @@ const {
                 --base0F: #dd7878;
             }
 
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-            }
-            * {
-                margin: 0;
-                padding: 0;
-                padding-left: 2rem;
-                padding-right: 2rem;
-                box-sizing: border-box;
-            }
-
-            html {
-                /* Remove any default margin/padding from html element */
-                margin: 0;
-                padding: 0;
+            html,
+            body {
+                height: 100%; /* Make sure html and body can expand */
             }
 
             body {
@@ -83,11 +70,17 @@ const {
                 background-color: var(--base00);
                 color: var(--base05);
                 line-height: 1.6;
-                margin: 0;
-                padding: 0;
-                /* Add side margins to the entire body */
-                padding-left: 2rem;
-                padding-right: 2rem;
+                display: flex; /* Use flexbox */
+                flex-direction: column; /* Stack children vertically */
+                min-height: 100vh; /* Minimum height of the viewport */
+            }
+
+            main {
+                flex: 1; /* Allow this element to grow and fill available space */
+                width: 100%;
+                max-width: 1200px; /* Constrain content width */
+                margin: 0 auto; /* Center the content */
+                padding: 0 2rem; /* Add side padding */
             }
 
             /* Global styles */
@@ -190,7 +183,10 @@ const {
     </head>
     <body class={enableFadeIn ? "fade-in-enabled" : ""}>
         <ParticleBackground />
-        <slot />
+        <main>
+            <slot />
+        </main>
+        <Footer />
 
         <script define:vars={{ enableFadeIn }}>
             if (enableFadeIn) {

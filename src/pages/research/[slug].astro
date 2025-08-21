@@ -1,11 +1,11 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import Navigation from '../../components/Navigation.astro';
-import { getCollection } from 'astro:content';
+import Layout from "../../layouts/Layout.astro";
+import Navigation from "../../components/Navigation.astro";
+import { getCollection } from "astro:content";
 
 // Generate static paths for all publications
 export async function getStaticPaths() {
-    const publications = await getCollection('publications');
+    const publications = await getCollection("publications");
     return publications.map((publication) => ({
         params: { slug: publication.slug },
         props: { publication },
@@ -18,7 +18,7 @@ const { Content } = await publication.render();
 
 <Layout title={`${publication.data.title} - Research`}>
     <Navigation />
-    
+
     <main>
         <div class="container">
             <article class="research-article">
@@ -26,25 +26,35 @@ const { Content } = await publication.render();
                     <h1>{publication.data.title}</h1>
                     <div class="research-meta">
                         <div class="authors">
-                            <strong>Authors:</strong> {publication.data.authors.join(', ')}
+                            <strong>Authors:</strong>
+                            {publication.data.authors.join(", ")}
                         </div>
                         <div class="journal">
-                            <strong>Published in:</strong> {publication.data.journal}, {publication.data.year}
+                            <strong>Published in:</strong>
+                            {publication.data.journal}, {publication.data.year}
                         </div>
                         <div class="status">
-                            <strong>Status:</strong> 
-                            <span class={`status-badge ${publication.data.status}`}>
+                            <strong>Status:</strong>
+                            <span
+                                class={`status-badge ${publication.data.status}`}
+                            >
                                 {publication.data.status}
                             </span>
                         </div>
-                        {publication.data.doi && (
-                            <div class="doi">
-                                <strong>DOI:</strong> 
-                                <a href={`https://doi.org/${publication.data.doi}`} target="_blank" rel="noopener noreferrer">
-                                    {publication.data.doi}
-                                </a>
-                            </div>
-                        )}
+                        {
+                            publication.data.doi && (
+                                <div class="doi">
+                                    <strong>DOI:</strong>
+                                    <a
+                                        href={`https://doi.org/${publication.data.doi}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        {publication.data.doi}
+                                    </a>
+                                </div>
+                            )
+                        }
                     </div>
                 </header>
 
@@ -53,7 +63,8 @@ const { Content } = await publication.render();
                 </div>
 
                 <footer class="research-footer">
-                    <a href="/#research" class="back-link">← Back to Research</a>
+                    <a href="/#research" class="back-link">← Back to Research</a
+                    >
                 </footer>
             </article>
         </div>
@@ -61,13 +72,8 @@ const { Content } = await publication.render();
 </Layout>
 
 <style>
-    main {
-        margin-top: 80px;
-        padding: 4rem 0 2rem 0;
-    }
-
     .research-article {
-        max-width: 800px;
+        max-width: 1000px;
         margin: 0 auto;
     }
 
@@ -191,17 +197,17 @@ const { Content } = await publication.render();
 
 <script>
     // KaTeX rendering
-    import 'https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.js';
-    import 'https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/contrib/auto-render.min.js';
-    
-    document.addEventListener("DOMContentLoaded", function() {
+    import "https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.js";
+    import "https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/contrib/auto-render.min.js";
+
+    document.addEventListener("DOMContentLoaded", function () {
         renderMathInElement(document.body, {
             delimiters: [
-                {left: "$$", right: "$$", display: true},
-                {left: "$", right: "$", display: false},
-                {left: "\\(", right: "\\)", display: false},
-                {left: "\\[", right: "\\]", display: true}
-            ]
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true },
+            ],
         });
     });
 </script>

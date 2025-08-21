@@ -1,9 +1,8 @@
-
 ---
-import type { CollectionEntry } from 'astro:content';
+import type { CollectionEntry } from "astro:content";
 
 interface Props {
-    project: CollectionEntry<'projects'>;
+    project: CollectionEntry<"projects">;
 }
 
 const { project } = Astro.props;
@@ -16,28 +15,36 @@ const { title, description, tags, math, mathDescription } = project.data;
     </h3>
 
     <div class="project-tags">
-        {tags.map((tag) => (
-            <span class={`tag ${tag.toLowerCase().replace(' ', '-')}`}>{tag}</span>
-        ))}
+        {
+            tags.map((tag) => (
+                <span class={`tag ${tag.toLowerCase().replace(" ", "-")}`}>
+                    {tag}
+                </span>
+            ))
+        }
     </div>
 
     <p>{description}</p>
 
-    {math && (
-        <div class="math-expression">
-			<div>`$$ ${math} $`</div>
-            {mathDescription && <small>{mathDescription}</small>}
-        </div>
-    )}
+    {
+        math && (
+            <div class="math-expression">
+                <div>`$$ ${math} $`</div>
+                {mathDescription && <small>{mathDescription}</small>}
+            </div>
+        )
+    }
 </div>
 
 <style>
     .project-card {
         background-color: var(--base01);
         border-radius: 12px;
-        padding: 2rem;
+        padding: 1.5rem;
         border: 1px solid var(--base02);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        transition:
+            transform 0.3s ease,
+            box-shadow 0.3s ease;
         height: 100%;
     }
 
@@ -72,11 +79,9 @@ const { title, description, tags, math, mathDescription } = project.data;
     .tag {
         background-color: var(--base0C);
         color: white;
-        padding: 0.4rem 1.0rem;
+        padding: 0.4rem 1rem;
         border-radius: 20px;
         font-size: 0.8rem;
         font-weight: 500;
     }
-
 </style>
-

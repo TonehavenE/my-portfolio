@@ -1,10 +1,10 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import Navigation from '../../components/Navigation.astro';
-import { getCollection } from 'astro:content';
+import Layout from "../../layouts/Layout.astro";
+import Navigation from "../../components/Navigation.astro";
+import { getCollection } from "astro:content";
 
 export async function getStaticPaths() {
-    const blogPosts = await getCollection('blog');
+    const blogPosts = await getCollection("blog");
     return blogPosts.map((post) => ({
         params: { slug: post.slug },
         props: { post },
@@ -15,46 +15,57 @@ const { post } = Astro.props;
 const { Content } = await post.render();
 
 function formatDate(date: Date) {
-    return date.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
+    return date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
     });
 }
 ---
 
 <Layout title={`${post.data.title} - Blog`}>
     <Navigation />
-    
+
     <main>
         <div class="container">
             <article class="blog-article">
                 <header class="blog-header">
-                    {post.data.heroImage && (
-                        <img src={post.data.heroImage} alt={post.data.title} class="hero-image" />
-                    )}
+                    {
+                        post.data.heroImage && (
+                            <img
+                                src={post.data.heroImage}
+                                alt={post.data.title}
+                                class="hero-image"
+                            />
+                        )
+                    }
                     <h1>{post.data.title}</h1>
                     <div class="blog-meta">
-						<div>
-                        <time datetime={post.data.pubDate.toISOString()}>
-                            {formatDate(post.data.pubDate)}
-                        </time>
-                        {post.data.updatedDate && (
-                            <div class="updated">
-                                Updated: {formatDate(post.data.updatedDate)}
-                            </div>
-                        )}
-						</div>
+                        <div>
+                            <time datetime={post.data.pubDate.toISOString()}>
+                                {formatDate(post.data.pubDate)}
+                            </time>
+                            {
+                                post.data.updatedDate && (
+                                    <div class="updated">
+                                        Updated:{" "}
+                                        {formatDate(post.data.updatedDate)}
+                                    </div>
+                                )
+                            }
+                        </div>
 
-						<div>
-                        {post.data.tags.length > 0 && (
-                            <div class="blog-tags">
-                                {post.data.tags.map((tag) => (
-                                    <span class="tag">{tag}</span>
-                                ))}
-                            </div>
-                        )}
-                            </div>
+                        <div>
+                            {
+                                post.data.tags.length > 0 && (
+                                    <div class="blog-tags">
+                                        {post.data.tags.map((tag) => (
+                                            <span class="tag">{tag}</span>
+                                        ))}
+                                    </div>
+                                )
+                            }
+                        </div>
                     </div>
                 </header>
 
@@ -71,11 +82,6 @@ function formatDate(date: Date) {
 </Layout>
 
 <style>
-    main {
-        margin-top: 80px;
-        padding: 4rem 0 2rem 0;
-    }
-
     .blog-article {
         max-width: 1000px;
         margin: 0 auto;
@@ -169,7 +175,8 @@ function formatDate(date: Date) {
         color: var(--base05);
     }
 
-    .blog-content :global(ul), .blog-content :global(ol) {
+    .blog-content :global(ul),
+    .blog-content :global(ol) {
         margin-bottom: 1.5rem;
         padding-left: 2rem;
     }
@@ -227,17 +234,17 @@ function formatDate(date: Date) {
 
 <script>
     // KaTeX rendering
-    import 'https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.js';
-    import 'https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/contrib/auto-render.min.js';
-    
-    document.addEventListener("DOMContentLoaded", function() {
+    import "https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.js";
+    import "https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/contrib/auto-render.min.js";
+
+    document.addEventListener("DOMContentLoaded", function () {
         renderMathInElement(document.body, {
             delimiters: [
-                {left: "$", right: "$", display: true},
-                {left: "$", right: "$", display: false},
-                {left: "\\(", right: "\\)", display: false},
-                {left: "\\[", right: "\\]", display: true}
-            ]
+                { left: "$", right: "$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true },
+            ],
         });
     });
 </script>
