@@ -12,7 +12,7 @@
     const RGB_LOW = 30;
     const RGB_HIGH = 255;
     const BACKGROUND_RGB = [239, 241, 245];
-    const REPULSION_FACTOR = 2;
+    const REPULSION_FACTOR = 1000;
 
     // =======================================================
 
@@ -89,13 +89,10 @@
                 return;
             const checkPixel = contentMap.get(this.pos.x, this.pos.y);
             if (checkPixel[0] < 255) {
-                // const avoidanceForce = p5.Vector.random2D().mult(
-                //     this.maxSpeed * REPULSION_FACTOR,
-                // );
-                const avoidanceForce = p5.Vector.sub(
-                    this.pos,
-                    this.prevPos,
-                ).mult(REPULSION_FACTOR);
+                const avoidanceForce = p5.Vector.random2D().mult(
+                    this.maxSpeed * REPULSION_FACTOR,
+                );
+
                 this.applyForce(avoidanceForce);
             }
         }
@@ -111,8 +108,9 @@
             contentMap.background(255);
             contentMap.noStroke();
             contentMap.fill(0);
-            const contentElements =
-                document.querySelectorAll("nav, main, footer");
+            const contentElements = document.querySelectorAll(
+                "nav, main > section, footer",
+            );
             contentElements.forEach((el) => {
                 const rect = el.getBoundingClientRect();
                 // We add scrollY to get the element's position relative to the document, not the viewport
