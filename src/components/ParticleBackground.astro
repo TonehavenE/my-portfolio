@@ -12,10 +12,8 @@
     // How strongly particles follow the flow
 
     // --- COLOR SETTINGS ---
-    const PARTICLE_ALPHA = 20;
+    const PARTICLE_ALPHA = 40;
     // Opacity of particle trails (0-255)
-    const FADE_ALPHA = 10;
-    // How quickly trails fade (0-255)
     const RGB_LOW = 30;
     // Low end for random color channels (0-255)
     const RGB_HIGH = 255;
@@ -23,35 +21,54 @@
     const BACKGROUND_RGB = [239, 241, 245];
     // Your --base00 color
 
+    // Trail length control
+    const TRAIL_LENGTH = 15; // Number of previous positions to remember
+
     // =======================================================
 
     class Particle {
         constructor(p) {
             this.p = p;
-            this.pos = p.createVector(p.random(p.width), p.random(p.height));
-            this.prevPos = this.pos.copy();
+            // Initialize position in a virtual space larger than viewport
+            const virtualHeight = Math.max(
+                document.body.scrollHeight,
+                window.innerHeight,
+            );
+            const virtualWidth = Math.max(
+                document.body.scrollWidth,
+                window.innerWidth,
+            );
+
+            this.pos = p.createVector(
+                p.random(virtualWidth),
+                p.random(virtualHeight),
+            );
             this.vel = p.createVector(0, 0);
             this.acc = p.createVector(0, 0);
             this.maxSpeed = MAX_SPEED;
+            // Store multiple previous positions for smooth fading trails
+            this.trail = [];
             // Use the global color parameters
             this.color = [
                 p.random(RGB_LOW, RGB_HIGH),
                 p.random(RGB_LOW, RGB_HIGH),
                 p.random(RGB_LOW, RGB_HIGH),
-                PARTICLE_ALPHA,
             ];
         }
 
         update() {
+            // Store current position in trail
+            this.trail.push(this.pos.copy());
+
+            // Keep trail length manageable
+            if (this.trail.length > TRAIL_LENGTH) {
+                this.trail.shift();
+            }
+
             this.vel.add(this.acc);
             this.vel.limit(this.maxSpeed);
             this.pos.add(this.vel);
             this.acc.mult(0);
-        }
-
-        updatePrev() {
-            this.prevPos.x = this.pos.x;
-            this.prevPos.y = this.pos.y;
         }
 
         applyForce(force) {
@@ -59,38 +76,96 @@
         }
 
         show() {
-            this.p.stroke(this.color);
+            const scrollX =
+                window.pageXOffset || document.documentElement.scrollLeft;
+            const scrollY =
+                window.pageYOffset || document.documentElement.scrollTop;
+
+            // Draw trail with fading alpha, adjusted for scroll position
             this.p.strokeWeight(1);
-            this.p.line(this.prevPos.x, this.prevPos.y, this.pos.x, this.pos.y);
-            this.updatePrev();
+            for (let i = 0; i < this.trail.length - 1; i++) {
+                // Calculate screen position relative to scroll
+                const x1 = this.trail[i].x - scrollX;
+                const y1 = this.trail[i].y - scrollY;
+                const x2 = this.trail[i + 1].x - scrollX;
+                const y2 = this.trail[i + 1].y - scrollY;
+
+                // Only draw if the line segment is visible on screen
+                if (this.isLineVisible(x1, y1, x2, y2)) {
+                    // Calculate alpha based on position in trail (newer = more opaque)
+                    const alpha = this.p.map(
+                        i,
+                        0,
+                        this.trail.length - 1,
+                        5,
+                        PARTICLE_ALPHA,
+                    );
+                    this.p.stroke(
+                        this.color[0],
+                        this.color[1],
+                        this.color[2],
+                        alpha,
+                    );
+
+                    this.p.line(x1, y1, x2, y2);
+                }
+            }
+        }
+
+        isLineVisible(x1, y1, x2, y2) {
+            // Simple bounds check - is any part of the line visible on screen?
+            const margin = 50; // Small margin for smoother transitions
+            return (
+                !(x1 < -margin && x2 < -margin) &&
+                !(x1 > this.p.width + margin && x2 > this.p.width + margin) &&
+                !(y1 < -margin && y2 < -margin) &&
+                !(y1 > this.p.height + margin && y2 > this.p.height + margin)
+            );
         }
 
         edges() {
-            if (this.pos.x > this.p.width) {
+            const virtualHeight = Math.max(
+                document.body.scrollHeight,
+                window.innerHeight,
+            );
+            const virtualWidth = Math.max(
+                document.body.scrollWidth,
+                window.innerWidth,
+            );
+
+            if (this.pos.x > virtualWidth) {
                 this.pos.x = 0;
-                this.updatePrev();
+                this.trail = []; // Clear trail when wrapping
             }
             if (this.pos.x < 0) {
-                this.pos.x = this.p.width;
-                this.updatePrev();
+                this.pos.x = virtualWidth;
+                this.trail = [];
             }
-            if (this.pos.y > this.p.height) {
+            if (this.pos.y > virtualHeight) {
                 this.pos.y = 0;
-                this.updatePrev();
+                this.trail = [];
             }
             if (this.pos.y < 0) {
-                this.pos.y = this.p.height;
-                this.updatePrev();
+                this.pos.y = virtualHeight;
+                this.trail = [];
             }
         }
 
-        follow(flowfield) {
-            const x = Math.floor(this.pos.x / 20);
-            const y = Math.floor(this.pos.y / 20);
-            const index = x + y * Math.floor(this.p.width / 20);
-            const force = flowfield[index];
-            if (force) {
-                this.applyForce(force);
+        follow(flowfield, scrollX, scrollY) {
+            // Use scroll-adjusted position for flowfield calculation
+            const adjustedX = this.pos.x - scrollX;
+            const adjustedY = this.pos.y - scrollY;
+
+            const x = Math.floor(adjustedX / 20);
+            const y = Math.floor(adjustedY / 20);
+            const cols = Math.floor(this.p.width / 20);
+            const index = x + y * cols;
+
+            if (x >= 0 && x < cols && y >= 0 && index < flowfield.length) {
+                const force = flowfield[index];
+                if (force) {
+                    this.applyForce(force);
+                }
             }
         }
     }
@@ -103,30 +178,42 @@
             const container = document.getElementById(
                 "particle-canvas-container",
             );
+            // Use viewport dimensions but make particles aware of scroll
             const canvas = p.createCanvas(
-                document.body.scrollWidth,
-                document.body.scrollHeight,
+                window.innerWidth,
+                window.innerHeight,
             );
             canvas.parent(container);
 
             for (let i = 0; i < PARTICLE_COUNT; i++) {
                 particles[i] = new Particle(p);
             }
+
+            // Use solid background instead of semi-transparent overlay
             p.background(BACKGROUND_RGB);
         };
+
         p.draw = () => {
+            // Clear the background completely each frame for clean trails
             p.background(
                 BACKGROUND_RGB[0],
                 BACKGROUND_RGB[1],
                 BACKGROUND_RGB[2],
-                FADE_ALPHA,
             );
+
+            // Get current scroll position
+            const scrollX =
+                window.pageXOffset || document.documentElement.scrollLeft;
+            const scrollY =
+                window.pageYOffset || document.documentElement.scrollTop;
+
             const cols = Math.floor(p.width / 20);
             const rows = Math.floor(p.height / 20);
             flowfield = new Array(cols * rows);
-            let yoff = 0;
+            let yoff = scrollY * 0.0001; // Factor scroll into noise
+
             for (let y = 0; y < rows; y++) {
-                let xoff = 0;
+                let xoff = scrollX * 0.0001;
                 for (let x = 0; x < cols; x++) {
                     const index = x + y * cols;
                     const angle =
@@ -140,23 +227,16 @@
             }
 
             for (let i = 0; i < particles.length; i++) {
-                particles[i].follow(flowfield);
+                particles[i].follow(flowfield, scrollX, scrollY);
                 particles[i].update();
                 particles[i].show();
                 particles[i].edges();
             }
         };
 
-        const resizeCanvasToBody = () => {
-            p.resizeCanvas(
-                document.body.scrollWidth,
-                document.body.scrollHeight,
-            );
+        p.windowResized = () => {
+            p.resizeCanvas(window.innerWidth, window.innerHeight);
         };
-
-        // Use a ResizeObserver to handle content changes
-        const observer = new ResizeObserver(resizeCanvasToBody);
-        observer.observe(document.body);
     };
 
     document.addEventListener("DOMContentLoaded", () => {
@@ -168,11 +248,12 @@
 
 <style>
     #particle-canvas-container {
-        position: absolute;
+        position: fixed;
         top: 0;
         left: 0;
-        width: 100%;
-        height: 100%;
+        width: 100vw;
+        height: 100vh;
         z-index: -1;
+        pointer-events: none;
     }
 </style>
