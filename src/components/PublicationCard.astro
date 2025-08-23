@@ -6,7 +6,7 @@ interface Props {
 }
 
 const { publication } = Astro.props;
-const { title, authors, journal, year, status, url, doi } = publication.data;
+const { title, authors, journal, year, status, url, doi, description } = publication.data;
 ---
 
 <article class="publication">
@@ -16,12 +16,14 @@ const { title, authors, journal, year, status, url, doi } = publication.data;
     <div class="authors">
         {authors.join(', ')}
     </div>
+                        { publication.data.journal && ( 
     <div class="journal">
         {journal}, {year} ({status})
     </div>
-    {publication.body && (
-        <div class="publication-abstract" set:html={publication.body} />
-    )}
+                        )
+                        }
+
+    <p class = "publication-abstract">{description}</p>
     <div class="publication-links">
         <a href={`/research/${publication.slug}`} class="pub-link">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">

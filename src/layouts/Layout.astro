@@ -20,7 +20,7 @@ const {
         <meta charset="UTF-8" />
         <meta name="description" content={description} />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
         <title>{title}</title>
 
         <script
@@ -33,7 +33,12 @@ const {
             href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css"
         />
 
-        <style>
+<style>
+	* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
             /* Base16 Color Scheme */
             :root {
                 --base00: #eff1f5;
@@ -54,11 +59,6 @@ const {
                 --base0F: #dd7878;
             }
 
-            html,
-            body {
-                height: 100%; /* Make sure html and body can expand */
-            }
-
             body {
                 font-family:
                     "SF Pro Text",
@@ -70,14 +70,14 @@ const {
                 background-color: var(--base00);
                 color: var(--base05);
                 line-height: 1.6;
-                display: flex; /* Use flexbox */
-                flex-direction: column; /* Stack children vertically */
-                min-height: 100vh; /* Minimum height of the viewport */
-                position: relative;
+   margin: 0;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    min-height: 100vh;
+    position: relative; /* Add this line */
             }
 
             main {
-                flex: 1; /* Allow this element to grow and fill available space */
                 width: 100%;
                 max-width: 1200px; /* Constrain content width */
                 margin: 0 auto; /* Center the content */
@@ -194,8 +194,8 @@ const {
         </style>
     </head>
     <body class={enableFadeIn ? "fade-in-enabled" : ""}>
-        <ParticleBackground />
         <main>
+   	        <ParticleBackground />
             <slot />
         </main>
         <Footer />
