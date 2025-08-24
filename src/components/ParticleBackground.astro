@@ -1,5 +1,4 @@
 <div id="particle-canvas-container"></div>
-
 <script>
     // =======================================================
     // == GLOBAL PARAMETERS TO TWEAK THE ANIMATION ==
@@ -7,7 +6,6 @@
     const PARTICLE_COUNT = 300;
     const MAX_SPEED = 1.5;
     const TURBULENCE = 2 * Math.PI * 2;
-    // How chaotic the flow is
     const FIELD_MAGNITUDE = 0.1;
     // How strongly particles follow the flow
 
@@ -15,9 +13,7 @@
     const PARTICLE_ALPHA = 40;
     // Opacity of particle trails (0-255)
     const RGB_LOW = 30;
-    // Low end for random color channels (0-255)
     const RGB_HIGH = 255;
-    // High end for random color channels (0-255)
     const BACKGROUND_RGB = [239, 241, 245];
     // Your --base00 color
 	const TRAIL_LENGTH = 300; // Number of previous positions to remember
@@ -49,7 +45,8 @@ function hexToRgba(hex, alpha = 1.0) {
     // =======================================================
 
     class Particle {
-        constructor(p) {
+        // The constructor now accepts the contentMap to check for valid spawn points
+        constructor(p, contentMap) {
             this.p = p;
             this.pos = p.createVector(p.random(p.width), p.random(p.height));
             this.vel = p.createVector(0, 0);
@@ -128,8 +125,24 @@ this.color = hexToRgba(randomHex, PARTICLE_ALPHA);
             const y = Math.floor(this.pos.y / 20);
             const index = x + y * Math.floor(this.p.width / 20);
             const force = flowfield[index];
-            if (force) {
-                this.applyForce(force);
+            if (force) this.applyForce(force);
+        }
+
+        avoid(contentMap) {
+            if (
+                this.pos.x < 0 ||
+                this.pos.x >= contentMap.width ||
+                this.pos.y < 0 ||
+                this.pos.y >= contentMap.height
+            )
+                return;
+            const checkPixel = contentMap.get(this.pos.x, this.pos.y);
+            if (checkPixel[0] < 255) {
+                const avoidanceForce = p5.Vector.random2D().mult(
+                    this.maxSpeed * REPULSION_FACTOR,
+                );
+
+                this.applyForce(avoidanceForce);
             }
         }
     }
@@ -137,6 +150,27 @@ this.color = hexToRgba(randomHex, PARTICLE_ALPHA);
     const sketch = (p) => {
         let particles = [];
         let flowfield;
+        let contentMap;
+
+        const updateContentMap = () => {
+            if (!contentMap) return;
+            contentMap.background(255);
+            contentMap.noStroke();
+            contentMap.fill(0);
+            const contentElements = document.querySelectorAll(
+                "nav, main > section, footer",
+            );
+            contentElements.forEach((el) => {
+                const rect = el.getBoundingClientRect();
+                // We add scrollY to get the element's position relative to the document, not the viewport
+                contentMap.rect(
+                    rect.left,
+                    rect.top + window.scrollY,
+                    rect.width,
+                    rect.height,
+                );
+            });
+        };
 
         p.setup = () => {
 // Select the container div
@@ -152,11 +186,25 @@ this.color = hexToRgba(randomHex, PARTICLE_ALPHA);
     // Tell the canvas to live inside that container
     canvas.parent('particle-canvas-container');
 
+            contentMap = p.createGraphics(p.width, p.height);
+            updateContentMap(); // Create the map *before* creating particles
+
             for (let i = 0; i < PARTICLE_COUNT; i++) {
-                particles[i] = new Particle(p);
+                particles.push(new Particle(p, contentMap)); // Pass the map to the constructor
             }
             p.background(BACKGROUND_RGB);
         };
+
+        // This is the cleanest way to handle resizing
+        p.windowResized = () => {
+            p.resizeCanvas(
+                document.body.scrollWidth,
+                document.body.scrollHeight,
+            );
+            contentMap = p.createGraphics(p.width, p.height);
+            updateContentMap();
+        };
+
         p.draw = () => {
 p.background(
                 BACKGROUND_RGB[0],
@@ -173,36 +221,38 @@ p.background(
                     const index = x + y * cols;
                     const angle =
                         p.noise(xoff, yoff, p.frameCount * 0.0005) * TURBULENCE;
-                    const v = p5.Vector.fromAngle(angle);
-                    v.setMag(FIELD_MAGNITUDE);
+                    const v =
+                        p5.Vector.fromAngle(angle).setMag(FIELD_MAGNITUDE);
                     flowfield[index] = v;
                     xoff += 0.1;
                 }
                 yoff += 0.1;
             }
-
-            for (let i = 0; i < particles.length; i++) {
-                particles[i].follow(flowfield);
-                particles[i].update();
-                particles[i].show();
-                particles[i].edges();
-            }
+            particles.forEach((particle) => {
+                particle.avoid(contentMap);
+                particle.follow(flowfield);
+                particle.update();
+                particle.show();
+                particle.edges();
+            });
         };
-
     };
 
-    document.addEventListener("DOMContentLoaded", () => {
-        if (window.p5) {
+    window.onload = () => {
+        const container = document.getElementById("particle-canvas-container");
+        if (window.p5 && container) {
             new window.p5(sketch);
         }
-    });
+    };
 </script>
-
 <style>
     #particle-canvas-container {
+        /* Use position: fixed to lock it to the viewport */
         position: absolute;
         top: 0;
         left: 0;
+        margin-bottom: 0;
+        padding-bottom: 0;
         width: 100%;
         height: calc(100% - 80px);
         z-index: -1;
