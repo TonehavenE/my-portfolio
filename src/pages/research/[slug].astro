@@ -29,10 +29,13 @@ const { Content } = await publication.render();
                             <strong>Authors:</strong>
                             {publication.data.authors.join(", ")}
                         </div>
-                        <div class="journal">
+                        { publication.data.journal && ( 
+                            <div class="journal">
                             <strong>Published in:</strong>
                             {publication.data.journal}, {publication.data.year}
                         </div>
+                        )
+                        }
                         <div class="status">
                             <strong>Status:</strong>
                             <span
