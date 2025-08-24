@@ -61,10 +61,9 @@ where, as usual, $L_x$ is the length of the box in the $x$ direction.
 
 According to the original [website](http://channelflow.org/),
 
->
 > The main goals of Channelflow are
 > * to lower the barrier to entry to numerical research in fluid dynamics
 > * to enable creation of short, readable, easily-modified CFD codes
 > * to provide easy access to advanced algorithms for computing exact solutions of Navier-Stokes
 
-It was written in C++ by John Gibson, and has been used in many research papers to explore the dynamics of shear flows, including the discovery of exact coherent states and the study of transition to turbulence. However, the C++ codebase has become difficult to maintain and extend over time. I am working on a Julia version of Channelflow, called Channelflow.jl, to make it more accessible and easier to use for researchers in fluid dynamics.
+It was written in C++ by John Gibson, and has been used in many research papers to explore the dynamics of shear flows, including the discovery of exact coherent states and the study of transition to turbulence. However, the C++ codebase has become difficult to maintain and extend over time. I am working on a Julia version of Channelflow, called Channelflow.jl, to make it more accessible and easier to use for researchers in fluid dynamics. For now, follow my progress on [GitHub](https://github.com/TonehavenE/Channelflow.jl). More updates to come.

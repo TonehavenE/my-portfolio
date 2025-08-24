@@ -5,7 +5,7 @@ authors:
   - "Eben Quenneville"
 year: 2025
 status: "development"
-featured: true
+featured: false
 description: "Novel computational methods for analyzing evolutionary relationships among butterfly species using genomic data."
 ---
 
