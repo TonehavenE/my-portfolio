@@ -16,9 +16,8 @@ const featuredProjects = projects
     .sort((a, b) => a.data.order - b.data.order);
 
 // Sort publications by year (newest first)
-const recentPublications = publications
-    .sort((a, b) => b.data.year - a.data.year)
-    .slice(0, 3);
+const recentPublications = publications.filter((pub) => pub.data.featured);
+recentPublications.sort((a, b) => b.data.year - a.data.year);
 ---
 
 <Layout
