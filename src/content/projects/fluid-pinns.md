@@ -1,14 +1,16 @@
 ---
-title: "Physics-Informed Neural Networks for Fluid Dynamics"
+title: "PINNs for Fluids"
 description: "Using a neural network that incorporates physical laws to solve and predict fluid dynamics problems."
 tags: 
   - "Fluid Mechanics"
   - "Python"
-  - "Machine Learning"
+  - "AI/ML"
 featured: true
 order: 4
 status: "completed"
 ---
+
+# Physics-Informed Neural Networks for Fluid Dynamics
 
 ## Abstract
 

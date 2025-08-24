@@ -1,5 +1,5 @@
 ---
-title: "Ergonomic Mechanical Keyboards"
+title: "Ergonomic Keyboards"
 description: "Designing Ergonomic Mechanical Keyboards from the ground up using KiCAD, Fusion 360, and QMK Firmware. Through this project, I grew as a full-stack product engineer."
 tags:
     - "Electronics"
